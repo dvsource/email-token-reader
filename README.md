@@ -6,7 +6,9 @@
 
 ### Create credential.json
 
-- https://console.cloud.google.com/
+- Go to https://console.cloud.google.com/
+- Create a new project or Use a existing one
+- Enable Gmail API
 - APIs & Services > Credentials.
 - Create Credentials > OAuth client ID.
 - Application type > Web application.
@@ -39,5 +41,5 @@ touch credential.json
 Create shortcut with
 
 ```
-cmd.exe /K "cd C:\src\email-token-reader && node index.js"
+cmd.exe /K "cd C:\src\email-token-reader && node app.js"
 ```

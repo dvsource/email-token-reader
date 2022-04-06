@@ -14,7 +14,7 @@ const TOKEN_PATH = "token.json";
 fs.readFile("credentials.json", (err, content) => {
   if (err) return console.log("Error loading client secret file:", err);
   // Authorize a client with credentials, then call the Gmail API.
-  authorize(JSON.parse(content), listLabels);
+  authorize(JSON.parse(content), readTokenAndStore);
 });
 
 /**
@@ -75,7 +75,7 @@ function getNewToken(oAuth2Client, callback) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listLabels(auth) {
+function readTokenAndStore(auth) {
   const gmail = google.gmail({ version: "v1", auth });
   const query = "Authcode:";
   gmail.users.messages
@@ -84,20 +84,24 @@ function listLabels(auth) {
       q: query,
     })
     .then((res) => {
-      const latestId = res.data.messages[0].id;
-      gmail.users.messages
-        .get({
-          userId: "me",
-          id: latestId,
-        })
-        .then((res1) => {
-          const headers = res1.data.payload.headers;
-          const subject = headers.find((_) => _.name === "Subject").value;
-          const token = subject.replace(/^\D+/g, "");
+      if (res.data.messages?.length) {
+        const latestId = res.data.messages[0].id;
+        gmail.users.messages
+          .get({
+            userId: "me",
+            id: latestId,
+          })
+          .then((res1) => {
+            const headers = res1.data.payload.headers;
+            const subject = headers.find((_) => _.name === "Subject").value;
+            const token = subject.replace(/^\D+/g, "");
 
-          ncp.copy(token, console.log);
-
-          console.log(token);
-        });
+            ncp.copy(token, () => {
+              console.log(`Token: ${token}\nCopeid to clipboard!`);
+            });
+          });
+      } else {
+        console.log("No new messages!");
+      }
     });
 }

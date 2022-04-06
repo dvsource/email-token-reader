@@ -77,7 +77,7 @@ function getNewToken(oAuth2Client, callback) {
  */
 function listLabels(auth) {
   const gmail = google.gmail({ version: "v1", auth });
-  const query = "after:" + new Date().toLocaleDateString() + " Authcode:";
+  const query = "Authcode:";
   gmail.users.messages
     .list({
       userId: "me",

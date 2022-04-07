@@ -94,10 +94,13 @@ function readTokenAndStore(auth) {
           .then((res1) => {
             const headers = res1.data.payload.headers;
             const subject = headers.find((_) => _.name === "Subject").value;
+            const date = headers.find((_) => _.name === "Date").value;
             const token = subject.replace(/^\D+/g, "");
 
+            console.log(`Token: ${token} (${date})`);
+
             ncp.copy(token, () => {
-              console.log(`Token: ${token}\nCopeid to clipboard!`);
+              console.log(`Copeid to clipboard!`);
             });
           });
       } else {

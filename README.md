@@ -16,6 +16,10 @@
 
 - refer: https://developers.google.com/workspace/guides/create-credentials#oauth-client-id
 
+### Install
+
+> `npm install`
+
 ### Run
 
 First create credential.json
